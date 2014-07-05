@@ -8,9 +8,9 @@
 Forked from caroussel beautiful grunt skeleton for martini app
 
 Customized for golang app running on the following structure:
-1. Goji (sorry martini) - EDIT : i think martini will still run on this.
-2. Bootstrap Less - i just like to handle less than css
-3. Single page application front end (angular/ember/vue/etc) - just need html as is, no need tmpl
+- Goji (sorry martini) EDIT : i think martini will still run on this.
+- Bootstrap Less : i just like to handle less than css
+- Single page application front end (angular/ember/vue/etc) : just need html as is, no need tmpl
 
 The orginal from Caroussel dont works so well with bootstrap less
 and its abit outdated. i only need to tweak a few stuff to get it to where i want it to be.
