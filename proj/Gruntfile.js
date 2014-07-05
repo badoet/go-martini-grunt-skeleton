@@ -79,6 +79,16 @@ module.exports = function(grunt) {
       }
     },
 
+    go:{
+      options:{
+        GOPATH: ["C:/golang"], // must be your GOLANG PATH
+      },
+      main:{
+        output: "dist/main",
+        run_files: ["main.go"],
+      }
+    },
+
     shell: {
       go: {
         command: 'grunt watch & go run main.go',
@@ -91,7 +101,10 @@ module.exports = function(grunt) {
         options: {
           stdout: true
         }
-      }
+      },
+      gobuild: {
+        command: 'grunt go:build:main',
+      },
     },
 
     jshint: {
@@ -112,6 +125,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-usemin');
   grunt.loadNpmTasks('grunt-shell');
   grunt.loadNpmTasks('grunt-rev');
+  grunt.loadNpmTasks('grunt-go');
 
   // Run "grunt build" to concat+minify+revision CSS/JS files, update usemin
   // blocks in templates
@@ -119,6 +133,7 @@ module.exports = function(grunt) {
     'jshint',
     'shell:gofmt',
     'clean',
+    'shell:gobuild',
     'copy:templates',  // copy templates to dist folder
     'less:production',
     'useminPrepare',   // prepare an object of files that will be passed to concat and/or uglify
