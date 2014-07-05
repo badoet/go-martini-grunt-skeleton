@@ -97,7 +97,7 @@ module.exports = function(grunt) {
         }
       },
       gofmt: {
-        command: 'gofmt -w *.go',
+        command: 'gofmt -s -w .', // somehow it was workin with gofmt -w *.go before -fkingweird
         options: {
           stdout: true
         }
