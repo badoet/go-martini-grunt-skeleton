@@ -5,7 +5,7 @@ module.exports = function(grunt) {
     pkg: grunt.file.readJSON('package.json'),
 
     useminPrepare: {
-      html: 'dist/templates/**.tmpl',
+      html: 'dist/public/**.html',
       options: {
         dest: 'dist/public',
         root: 'public',
@@ -13,7 +13,7 @@ module.exports = function(grunt) {
     },
 
     usemin: {
-      html: 'dist/templates/**.tmpl',
+      html: 'dist/public/**.html',
       options: {
         assetsDirs: ['dist/public',]
       }
@@ -22,7 +22,7 @@ module.exports = function(grunt) {
     // copy templates to dist folder for usemin to update
     copy: {
       templates: {
-        files: [{expand:true, src:'templates/**.tmpl', dest: 'dist/'}]
+        files: [{expand:true, src:'public/**.html', dest: 'dist/'}]
       }
     },
 
@@ -31,25 +31,26 @@ module.exports = function(grunt) {
     less: {
       development: {
         options: {
-          paths: ['public/css'],
+          relativeUrls: true,
           cleancss: true
         },
         files: {
-          'public/css/base.css': 'public/css/base.less'
+          'public/css/base.css': 'public/less/base.less'
         },
       },
       production: {
         options: {
-          paths: ['public/css'],
+          relativeUrls: true,
+          compress: true,
           cleancss: true
         },
         files: {
-          'public/css/base.css': 'public/css/base.less'
+          'dist/public/css/base.css': 'public/less/base.less'
         },
       },
     },
 
-    filerev: {
+    rev: {
       options: {
         encoding: 'utf8',
         algorithm: 'md5',
@@ -68,6 +69,13 @@ module.exports = function(grunt) {
       js: {
         files: ['public/js/*.js'],
         tasks: ['jshint',]
+      },
+      go: {
+        files: ['**/*.go'], // watch and reload go run if any .go file is changed, downside dunno if it compile or not
+        tasks: ['shell:gofmt', 'shell:go'],
+        options: {
+          livereload: true,
+        },
       }
     },
 
@@ -103,7 +111,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-usemin');
   grunt.loadNpmTasks('grunt-shell');
-  grunt.loadNpmTasks('grunt-filerev');
+  grunt.loadNpmTasks('grunt-rev');
 
   // Run "grunt build" to concat+minify+revision CSS/JS files, update usemin
   // blocks in templates
@@ -117,13 +125,15 @@ module.exports = function(grunt) {
     'concat',          // concatenate assets
     'uglify',        // minify JS files
     'cssmin',          // minify CSS files
-    'filerev',
+    'rev',
     'usemin',          // replace usemin blocks with actual filepaths
   ]);
 
   // Run "grunt" to start the go server and watch less files for recompilation
   grunt.registerTask('default',[
     'jshint',
+    'less:development',
+    'shell:gofmt',
     'shell:go',
   ]);
 
