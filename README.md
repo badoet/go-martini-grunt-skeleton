@@ -15,7 +15,9 @@ Customized for golang app running on the following structure:
 The orginal from Caroussel dont works so well with bootstrap less
 and its abit outdated. i only need to tweak a few stuff to get it to where i want it to be.
 
-
+KNOWN ISSUE: after running 'grunt' the server wont start yet.
+will need to just do a save on one of the .go file to get the server reloaded
+will look on how to get this up automatially . any advice?
 
 see the original for more info
 https://github.com/carousell/go-martini-grunt-skeleton
