@@ -1,22 +1,33 @@
 package main
 
 import (
-	"github.com/codegangsta/martini"
-	"github.com/codegangsta/martini-contrib/render"
+	"fmt"
+	"html/template"
+	"net/http"
+
+	"github.com/zenazn/goji"
+	"github.com/zenazn/goji/web"
 )
 
-func index(r render.Render) {
-	r.HTML(200, "index", nil)
-}
-
-func initMartini() *martini.ClassicMartini {
-	m := martini.Classic()
-	m.Use(render.Renderer())
-	m.Get("/", index)
-	return m
-}
-
 func main() {
-	m := initMartini()
-	m.Run()
+	// routing
+	goji.Get("/", IndexPage)
+	goji.Get("/echo/:name", hello)
+
+	//serve static file from public folder
+	goji.Get("/*", http.FileServer(http.Dir("./public")))
+
+	defer goji.Serve()
+}
+
+func IndexPage(w http.ResponseWriter, r *http.Request) {
+	if t, err := template.ParseFiles("public/index.html"); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	} else {
+		t.Execute(w, nil)
+	}
+}
+
+func hello(c web.C, w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "Hello, %s!", c.URLParams["name"])
 }
